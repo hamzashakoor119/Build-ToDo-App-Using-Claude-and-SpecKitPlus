@@ -60,3 +60,19 @@ Thumbs.db
 # Project specific
 *.tmp
 *.bak
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+.vercel/
