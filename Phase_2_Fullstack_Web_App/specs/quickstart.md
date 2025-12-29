@@ -61,7 +61,7 @@ cd ../frontend
 npm install
 
 # Create .env.local file
-cp .env.example .env.local
+cp .env.local.example .env.local
 ```
 
 Edit `frontend/.env.local`:

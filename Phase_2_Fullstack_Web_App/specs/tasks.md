@@ -162,15 +162,15 @@
 
 ### Backend Implementation for US4
 
-- [ ] T051 [US4] Add toggle_complete(user_id, task_id) function to backend/app/services/task_service.py
-- [ ] T052 [US4] Implement PATCH /api/{user_id}/tasks/{task_id}/complete endpoint in backend/app/routers/tasks.py
+- [x] T051 [US4] Add toggle_complete(user_id, task_id) function to backend/app/services/task_service.py
+- [x] T052 [US4] Implement PATCH /api/{user_id}/tasks/{task_id}/complete endpoint in backend/app/routers/tasks.py
 
 ### Frontend Implementation for US4
 
-- [ ] T053 [US4] Add checkbox/toggle button to frontend/src/components/tasks/TaskItem.tsx
-- [ ] T054 [US4] Add api.tasks.toggleComplete() method to frontend/src/lib/api.ts
-- [ ] T055 [US4] Implement onClick handler in TaskItem to toggle completion
-- [ ] T056 [US4] Add visual distinction between pending and completed tasks (strikethrough, color change)
+- [x] T053 [US4] Add checkbox/toggle button to frontend/src/components/tasks/TaskItem.tsx
+- [x] T054 [US4] Add api.tasks.toggleComplete() method to frontend/src/lib/api.ts
+- [x] T055 [US4] Implement onClick handler in TaskItem to toggle completion
+- [x] T056 [US4] Add visual distinction between pending and completed tasks (strikethrough, color change)
 
 **Checkpoint**: User Story 4 complete - users can mark tasks complete/incomplete
 
@@ -184,17 +184,17 @@
 
 ### Backend Implementation for US5
 
-- [ ] T057 [US5] Add update_task(user_id, task_id, task_data) function to backend/app/services/task_service.py
-- [ ] T058 [US5] Implement PUT /api/{user_id}/tasks/{task_id} endpoint in backend/app/routers/tasks.py
-- [ ] T059 [US5] Implement GET /api/{user_id}/tasks/{task_id} endpoint for fetching single task
+- [x] T057 [US5] Add update_task(user_id, task_id, task_data) function to backend/app/services/task_service.py
+- [x] T058 [US5] Implement PUT /api/{user_id}/tasks/{task_id} endpoint in backend/app/routers/tasks.py
+- [x] T059 [US5] Implement GET /api/{user_id}/tasks/{task_id} endpoint for fetching single task
 
 ### Frontend Implementation for US5
 
-- [ ] T060 [P] [US5] Create frontend/src/components/tasks/TaskEditModal.tsx with form for editing title/description
-- [ ] T061 [US5] Add edit button to frontend/src/components/tasks/TaskItem.tsx
-- [ ] T062 [US5] Add api.tasks.update() method to frontend/src/lib/api.ts
-- [ ] T063 [US5] Implement modal open/close logic in TaskItem
-- [ ] T064 [US5] Update task in list after successful edit
+- [x] T060 [P] [US5] Create frontend/src/components/tasks/TaskEditModal.tsx with form for editing title/description
+- [x] T061 [US5] Add edit button to frontend/src/components/tasks/TaskItem.tsx
+- [x] T062 [US5] Add api.tasks.update() method to frontend/src/lib/api.ts
+- [x] T063 [US5] Implement modal open/close logic in TaskItem
+- [x] T064 [US5] Update task in list after successful edit
 
 **Checkpoint**: User Story 5 complete - users can update tasks
 
@@ -208,15 +208,15 @@
 
 ### Backend Implementation for US6
 
-- [ ] T065 [US6] Add delete_task(user_id, task_id) function to backend/app/services/task_service.py
-- [ ] T066 [US6] Implement DELETE /api/{user_id}/tasks/{task_id} endpoint in backend/app/routers/tasks.py
+- [x] T065 [US6] Add delete_task(user_id, task_id) function to backend/app/services/task_service.py
+- [x] T066 [US6] Implement DELETE /api/{user_id}/tasks/{task_id} endpoint in backend/app/routers/tasks.py
 
 ### Frontend Implementation for US6
 
-- [ ] T067 [US6] Add delete button to frontend/src/components/tasks/TaskItem.tsx
-- [ ] T068 [US6] Add confirmation dialog/modal for delete action
-- [ ] T069 [US6] Add api.tasks.delete() method to frontend/src/lib/api.ts
-- [ ] T070 [US6] Remove task from list immediately on successful delete
+- [x] T067 [US6] Add delete button to frontend/src/components/tasks/TaskItem.tsx
+- [x] T068 [US6] Add confirmation dialog/modal for delete action
+- [x] T069 [US6] Add api.tasks.delete() method to frontend/src/lib/api.ts
+- [x] T070 [US6] Remove task from list immediately on successful delete
 
 **Checkpoint**: User Story 6 complete - users can delete tasks
 
@@ -226,16 +226,16 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T071 [P] Add responsive design improvements to all components (320px+ mobile support)
-- [ ] T072 [P] Add loading spinners/states to all async operations
-- [ ] T073 [P] Improve error messages with user-friendly text
-- [ ] T074 [P] Add form validation feedback (character limits, required fields)
-- [ ] T075 [P] Create frontend/.env.local.example with actual placeholder values
-- [ ] T076 [P] Create backend/README.md with setup and running instructions
-- [ ] T077 [P] Create frontend/README.md with setup and running instructions
-- [ ] T078 Run quickstart.md validation - verify setup instructions work
-- [ ] T079 Test all 6 endpoints with curl/Postman to verify API contract
-- [ ] T080 End-to-end manual testing of all user stories
+- [x] T071 [P] Add responsive design improvements to all components (320px+ mobile support)
+- [x] T072 [P] Add loading spinners/states to all async operations
+- [x] T073 [P] Improve error messages with user-friendly text
+- [x] T074 [P] Add form validation feedback (character limits, required fields)
+- [x] T075 [P] Create frontend/.env.local.example with actual placeholder values
+- [x] T076 [P] Create backend/README.md with setup and running instructions
+- [x] T077 [P] Create frontend/README.md with setup and running instructions
+- [x] T078 Run quickstart.md validation - verify setup instructions work
+- [x] T079 Test all 6 endpoints with curl/Postman to verify API contract
+- [x] T080 End-to-end manual testing of all user stories
 
 ---
 

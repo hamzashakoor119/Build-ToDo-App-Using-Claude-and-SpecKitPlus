@@ -128,3 +128,58 @@ NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
 - Responsive design
 - Real-time form validation
 - Error handling with retry options
+
+## Development Roadmap
+
+### Current Status: Polish Phase - Final Stretch
+
+| Phase | Status | Tasks |
+|-------|--------|-------|
+| Setup | Complete | T001-T009 |
+| Foundation | Complete | T010-T025 |
+| US1: Auth | Complete | T026-T034 |
+| US2: View Tasks | Complete | T035-T043 |
+| US3: Add Task | Complete | T044-T050 |
+| US4: Mark Complete | Complete | T051-T056 |
+| US5: Update Task | Complete | T057-T064 |
+| US6: Delete Task | Complete | T065-T070 |
+| Polish | **Complete** | T071-T080 |
+
+**Progress**: 80/80 tasks complete (100%)
+
+### Completed Polish Improvements
+
+- **T071**: Responsive design for 320px+ mobile screens
+- **T072**: Loading spinners on all async operations
+- **T073**: User-friendly error messages
+- **T074**: Real-time form validation with character counters
+- **T075**: Created frontend/.env.local.example
+- **T076**: Created backend/README.md
+- **T077**: Created frontend/README.md
+- **T078**: Quickstart.md validated and fixed
+- **T079**: API test commands documented (specs/api-test-commands.md)
+- **T080**: E2E test checklist created (specs/e2e-test-checklist.md)
+
+See `specs/tasks.md` for the full task breakdown.
+
+## Claude Code Integration
+
+This project uses Claude Code for development with:
+
+- **Skills**: Reusable patterns in `.claude/skills/`
+- **Commands**: Slash commands in `.claude/commands/`
+- **Specs**: Specifications in `specs/`
+
+### Quick Commands
+
+```bash
+/status    # Get instant project status report
+/summary   # Alias for /status
+```
+
+## Related Documentation
+
+- `CLAUDE.md` - Claude Code rules and guidelines
+- `specs/spec.md` - Feature specification
+- `specs/plan.md` - Implementation plan
+- `specs/tasks.md` - Task breakdown

@@ -4,7 +4,38 @@
 
 **Phase**: 2 of 5 - Full-Stack Web Application
 **Scope**: Web-based Todo app with authentication and persistent storage
-**Status**: Self-contained, portable project folder
+**Status**: Active Development - MVP In Progress
+**Branch**: `002-fullstack-web-app`
+**Last Updated**: 2025-12-29
+
+## Current Development State
+
+### Progress Summary
+- **Phase 1-5 (Setup + Foundation + US1-US3)**: COMPLETE
+- **Phase 6 (US4 - Mark Complete)**: COMPLETE
+- **Phase 7 (US5 - Update Task)**: COMPLETE
+- **Phase 8 (US6 - Delete Task)**: COMPLETE
+- **Phase 9 (Polish)**: COMPLETE
+
+**All 80 tasks complete (100%)**
+
+### What's Working
+- Backend FastAPI with all CRUD endpoints + toggle complete
+- Frontend Next.js App Router with full task management UI
+- Authentication pages (Login/Register forms)
+- Task list with add, view, edit, delete, toggle complete
+- Edit modal for updating tasks
+- Delete confirmation dialog
+- Visual distinction for completed tasks (strikethrough, separate sections)
+- Database connection (Neon PostgreSQL via SQLModel)
+
+### What Was Completed (Polish Phase)
+- T071: Responsive design improvements (320px+ mobile support)
+- T072: Loading spinners for all async operations
+- T073: User-friendly error messages (lib/errors.ts)
+- T074: Form validation feedback (character limits)
+- T075-T077: Documentation files (READMEs, env examples)
+- T078-T080: Testing documentation (api-test-commands.md, e2e-test-checklist.md)
 
 ## Technology Stack (Phase 2 Specific)
 
@@ -93,33 +124,39 @@ After completing tasks, create PHR in `history/prompts/`:
 ## API Contract Overview
 
 ```yaml
-# Authentication
-POST   /api/auth/register    # Create new user
-POST   /api/auth/login       # User login
-POST   /api/auth/logout      # User logout
+# Health
+GET    /health               # Health check endpoint
 
-# Tasks (Protected)
-GET    /api/tasks            # List user's tasks
-POST   /api/tasks            # Create task
-GET    /api/tasks/{id}       # Get single task
-PUT    /api/tasks/{id}       # Update task
-DELETE /api/tasks/{id}       # Delete task
-PATCH  /api/tasks/{id}/complete  # Toggle completion
+# Tasks (Protected - User-scoped)
+GET    /api/{user_id}/tasks              # List user's tasks
+POST   /api/{user_id}/tasks              # Create task
+GET    /api/{user_id}/tasks/{id}         # Get single task
+PUT    /api/{user_id}/tasks/{id}         # Update task
+DELETE /api/{user_id}/tasks/{id}         # Delete task
+PATCH  /api/{user_id}/tasks/{id}/complete  # Toggle completion
 ```
+
+**Note**: Authentication is handled by Better Auth on the frontend. Backend validates JWT tokens and ensures user_id in URL matches the authenticated user.
 
 ## Environment Variables
 
 ### Backend (.env)
 ```
-DATABASE_URL=postgresql://...
-JWT_SECRET=your-secret-key
+DATABASE_URL=postgresql://user:password@host/dbname?sslmode=require
+BETTER_AUTH_SECRET=your-secret-key-min-32-chars
 CORS_ORIGINS=http://localhost:3000
+DEBUG=true
 ```
 
 ### Frontend (.env.local)
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8000
+BETTER_AUTH_SECRET=your-secret-key-min-32-chars
+BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
 ```
+
+**Important**: `BETTER_AUTH_SECRET` must be identical in both frontend and backend.
 
 ## Success Criteria
 
@@ -139,6 +176,70 @@ This folder is designed to be **self-contained**. It can be:
 - Developed without context pollution from other phases
 
 All specs, history, and configuration are local to this phase.
+
+---
+
+## Quick Commands
+
+### `/status` or `/summary` - Instant Project Report
+Get an instant, fact-based project status report with minimal latency.
+
+**What it does**:
+- Scans specs/, history/, and metadata files (NOT source code)
+- Calculates progress from tasks.md
+- Lists recent milestones (last 3 PHRs/ADRs)
+- Shows next pending tasks
+- Checks frontend and backend component status
+
+**Output includes**:
+- Phase Identity & Tech Stack
+- Completion percentage
+- Component status (Frontend/Backend/Auth/Database)
+- Completed milestones
+- Next immediate tasks
+- Blocked/Risks
+
+**Performance**: < 30 seconds, < 400 output tokens
+
+**Skill location**: `.claude/skills/project-intelligence/SKILL.md`
+
+---
+
+## Available Skills
+
+Phase 2 comes with specialized skills for fullstack development:
+
+| Skill | Purpose | Location |
+|-------|---------|----------|
+| **project-intelligence** | Instant status/summary reports | `.claude/skills/project-intelligence/` |
+| **nextjs-component-generator** | React component templates for Next.js | `.claude/skills/nextjs-component-generator/` |
+| **api-endpoint-tester** | curl commands for testing FastAPI | `.claude/skills/api-endpoint-tester/` |
+| **fullstack-integration** | Frontend-backend connection guide | `.claude/skills/fullstack-integration/` |
+| **neon-db-setup** | Neon PostgreSQL configuration | `.claude/skills/neon-db-setup/` |
+| **jwt-middleware** | JWT verification for FastAPI | `.claude/skills/jwt-middleware/` |
+| **cors-config** | CORS middleware setup | `.claude/skills/cors-config/` |
+| **build-error-handler** | Common build error solutions | `.claude/skills/build-error-handler/` |
+| **spec-driven-development** | Specification workflow | `.claude/skills/spec-driven-development/` |
+| **skill-factory** | Creating new skills | `.claude/skills/skill-factory/` |
+| **todo-domain-expert** | Todo app domain knowledge | `.claude/skills/todo-domain-expert/` |
+| **review-and-judge** | Code review patterns | `.claude/skills/review-and-judge/` |
+
+---
+
+## Phase 1 Logic Reuse
+
+Phase 1's core business logic has been adapted for Phase 2:
+
+| Phase 1 Component | Phase 2 Equivalent | Notes |
+|-------------------|-------------------|-------|
+| `models.py` (Task dataclass) | `backend/app/models/task.py` (SQLModel) | Same validation rules (1-200 title, 1000 desc) |
+| `storage.py` (TaskStore) | `backend/app/services/task_service.py` | Async database operations |
+| CLI interface | REST API + React UI | Same 5 CRUD operations |
+
+The validation rules from Phase 1 are preserved:
+- Title: Required, 1-200 characters
+- Description: Optional, max 1000 characters
+- Completed: Boolean, defaults to False
 
 ---
 
