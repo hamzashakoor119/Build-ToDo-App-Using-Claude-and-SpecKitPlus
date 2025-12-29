@@ -43,6 +43,31 @@ class TestTaskStoreAdd:
         with pytest.raises(ValueError, match="Task title exceeds 200 characters"):
             store.add_task(long_title)
 
+    def test_add_task_with_description(self):
+        """Test adding task with description."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries", "Milk, eggs, bread")
+
+        task = store.get_task(task_id)
+        assert task.title == "Buy groceries"
+        assert task.description == "Milk, eggs, bread"
+
+    def test_add_task_without_description(self):
+        """Test adding task without description defaults to None."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries")
+
+        task = store.get_task(task_id)
+        assert task.description is None
+
+    def test_add_task_with_long_description_raises_error(self):
+        """Test that description over 1000 chars raises ValueError."""
+        store = TaskStore()
+        long_desc = "A" * 1001
+
+        with pytest.raises(ValueError, match="Task description exceeds 1000 characters"):
+            store.add_task("Test", long_desc)
+
 
 class TestTaskStoreList:
     """Test listing tasks."""
@@ -136,14 +161,14 @@ class TestTaskStoreMarkComplete:
 
 
 class TestTaskStoreUpdate:
-    """Test updating task titles."""
+    """Test updating task titles and descriptions."""
 
     def test_update_task_title(self):
         """Test updating a task's title."""
         store = TaskStore()
         task_id = store.add_task("Buy groceries")
 
-        task = store.update_task(task_id, "Buy organic groceries")
+        task = store.update_task(task_id, title="Buy organic groceries")
         assert task.title == "Buy organic groceries"
 
     def test_update_with_empty_title_raises_error(self):
@@ -152,14 +177,66 @@ class TestTaskStoreUpdate:
         task_id = store.add_task("Buy groceries")
 
         with pytest.raises(ValueError, match="Task title cannot be empty"):
-            store.update_task(task_id, "")
+            store.update_task(task_id, title="")
 
     def test_update_nonexistent_task_raises_error(self):
         """Test that updating nonexistent task raises KeyError."""
         store = TaskStore()
 
         with pytest.raises(KeyError, match="Task with ID .* not found"):
-            store.update_task("nonexistent", "New title")
+            store.update_task("nonexistent", title="New title")
+
+    def test_update_task_description(self):
+        """Test updating a task's description."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries")
+
+        task = store.update_task(task_id, description="Milk, eggs, bread")
+        assert task.description == "Milk, eggs, bread"
+
+    def test_update_task_title_and_description(self):
+        """Test updating both title and description."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries", "Old description")
+
+        task = store.update_task(task_id, title="Buy organic groceries", description="New items")
+        assert task.title == "Buy organic groceries"
+        assert task.description == "New items"
+
+    def test_update_description_to_clear(self):
+        """Test clearing description with empty string."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries", "Some description")
+
+        task = store.update_task(task_id, description="")
+        assert task.description is None
+
+    def test_update_description_too_long_raises_error(self):
+        """Test that updating with long description raises ValueError."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries")
+        long_desc = "A" * 1001
+
+        with pytest.raises(ValueError, match="Task description exceeds 1000 characters"):
+            store.update_task(task_id, description=long_desc)
+
+    def test_update_only_title_preserves_description(self):
+        """Test that updating only title preserves existing description."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries", "Milk, eggs")
+
+        task = store.update_task(task_id, title="Buy organic groceries")
+        assert task.title == "Buy organic groceries"
+        assert task.description == "Milk, eggs"
+
+    def test_update_only_description_preserves_title(self):
+        """Test that updating only description preserves title."""
+        store = TaskStore()
+        task_id = store.add_task("Buy groceries", "Old description")
+
+        task = store.update_task(task_id, description="New description")
+        assert task.title == "Buy groceries"
+        assert task.description == "New description"
 
 
 class TestTaskStoreDelete:

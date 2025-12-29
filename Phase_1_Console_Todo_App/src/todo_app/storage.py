@@ -20,12 +20,13 @@ class TaskStore:
         self._tasks: Dict[str, Task] = {}
         self._order: List[str] = []
 
-    def add_task(self, title: str) -> str:
+    def add_task(self, title: str, description: Optional[str] = None) -> str:
         """
         Add a new task and return its ID.
 
         Args:
             title: Task title (will be validated by Task model)
+            description: Optional task description
 
         Returns:
             str: The UUID of the created task
@@ -33,7 +34,7 @@ class TaskStore:
         Raises:
             ValueError: If title is invalid (empty or too long)
         """
-        task = Task(title=title)
+        task = Task(title=title, description=description)
         self._tasks[task.id] = task
         self._order.append(task.id)
         return task.id
@@ -95,13 +96,19 @@ class TaskStore:
         task.completed = completed
         return task
 
-    def update_task(self, task_id: str, title: str) -> Task:
+    def update_task(
+        self,
+        task_id: str,
+        title: Optional[str] = None,
+        description: Optional[str] = None
+    ) -> Task:
         """
-        Update a task's title.
+        Update a task's title and/or description.
 
         Args:
             task_id: Full or partial task ID
-            title: New title (will be validated)
+            title: New title (optional, will be validated if provided)
+            description: New description (optional, use empty string to clear)
 
         Returns:
             The updated task
@@ -114,11 +121,23 @@ class TaskStore:
         if task is None:
             raise KeyError(f"Task with ID {task_id} not found")
 
-        # Validate new title by creating temporary task
-        temp = Task(title=title)
+        # Update title if provided
+        if title is not None:
+            # Validate new title by creating temporary task
+            temp = Task(title=title)
+            task.title = temp.title
 
-        # Update the title
-        task.title = temp.title
+        # Update description if provided
+        if description is not None:
+            # Empty string clears description
+            if description.strip() == "":
+                task.description = None
+            else:
+                # Validate description length
+                if len(description.strip()) > 1000:
+                    raise ValueError("Task description exceeds 1000 characters")
+                task.description = description.strip()
+
         return task
 
     def delete_task(self, task_id: str) -> None:

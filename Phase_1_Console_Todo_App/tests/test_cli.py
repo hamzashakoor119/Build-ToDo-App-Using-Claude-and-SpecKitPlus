@@ -35,6 +35,24 @@ class TestCLIAdd:
         assert "Error:" in captured.err
         assert "cannot be empty" in captured.err
 
+    def test_add_with_description(self, capsys):
+        """Test adding a task with description."""
+        exit_code = run_cli(["add", "Buy groceries", "-d", "Milk, eggs, bread"])
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "✓ Task added successfully" in captured.out
+        assert "Buy groceries" in captured.out
+        assert "Milk, eggs, bread" in captured.out
+
+    def test_add_with_long_description_flag(self, capsys):
+        """Test adding a task with --description flag."""
+        exit_code = run_cli(["add", "Buy groceries", "--description", "Shopping list"])
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "Shopping list" in captured.out
+
 
 class TestCLIList:
     """Test 'list' command."""
@@ -71,6 +89,17 @@ class TestCLIList:
         assert exit_code == 0
         assert "✓" in captured.out  # Completed symbol
         assert "Test task" in captured.out
+
+    def test_list_shows_description(self, capsys):
+        """Test that list shows task descriptions."""
+        store.add_task("Buy groceries", "Milk, eggs, bread")
+
+        exit_code = run_cli(["list"])
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "Buy groceries" in captured.out
+        assert "Milk, eggs, bread" in captured.out
 
 
 class TestCLIComplete:
@@ -144,6 +173,50 @@ class TestCLIUpdate:
         captured = capsys.readouterr()
         assert exit_code == 1
         assert "Error:" in captured.err
+
+    def test_update_task_description(self, capsys):
+        """Test updating task description."""
+        task_id = store.add_task("Buy groceries")
+        partial_id = task_id[:8]
+
+        exit_code = run_cli(["update", partial_id, "-d", "Milk, eggs, bread"])
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "✓ Task updated successfully" in captured.out
+        assert "New Description: Milk, eggs, bread" in captured.out
+
+        task = store.get_task(task_id)
+        assert task.description == "Milk, eggs, bread"
+
+    def test_update_task_title_and_description(self, capsys):
+        """Test updating both title and description."""
+        task_id = store.add_task("Buy groceries", "Old items")
+        partial_id = task_id[:8]
+
+        exit_code = run_cli(["update", partial_id, "Buy organic groceries", "-d", "New items"])
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "✓ Task updated successfully" in captured.out
+
+        task = store.get_task(task_id)
+        assert task.title == "Buy organic groceries"
+        assert task.description == "New items"
+
+    def test_update_clear_description(self, capsys):
+        """Test clearing description with empty string."""
+        task_id = store.add_task("Buy groceries", "Some description")
+        partial_id = task_id[:8]
+
+        exit_code = run_cli(["update", partial_id, "-d", ""])
+
+        captured = capsys.readouterr()
+        assert exit_code == 0
+        assert "(cleared)" in captured.out
+
+        task = store.get_task(task_id)
+        assert task.description is None
 
 
 class TestCLIDelete:

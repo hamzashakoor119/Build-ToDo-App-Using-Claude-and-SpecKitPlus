@@ -15,10 +15,13 @@ store = TaskStore()
 def cmd_add(args) -> int:
     """Handle 'add' command."""
     try:
-        task_id = store.add_task(args.title)
+        description = getattr(args, 'description', None)
+        task_id = store.add_task(args.title, description)
         print(f"✓ Task added successfully")
         print(f"ID: {task_id[:8]}")
         print(f"Title: {args.title}")
+        if description:
+            print(f"Description: {description}")
         return 0
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
@@ -41,6 +44,10 @@ def cmd_list(args) -> int:
         for task in tasks:
             status = "✓" if task.completed else "○"
             print(f"  [{status}] {task.id[:8]}... {task.title}")
+            if task.description:
+                # Show truncated description (first 50 chars)
+                desc = task.description[:50] + "..." if len(task.description) > 50 else task.description
+                print(f"      └─ {desc}")
         return 0
     except KeyboardInterrupt:
         print("\nCancelled.", file=sys.stderr)
@@ -94,12 +101,31 @@ def cmd_update(args) -> int:
             return 1
 
         old_title = old_task.title
-        task = store.update_task(args.task_id, args.new_title)
+        old_description = old_task.description
+
+        # Get new values (None means don't update)
+        new_title = getattr(args, 'new_title', None)
+        new_description = getattr(args, 'description', None)
+
+        task = store.update_task(args.task_id, title=new_title, description=new_description)
 
         print(f"✓ Task updated successfully")
         print(f"ID: {task.id[:8]}")
-        print(f"Old Title: {old_title}")
-        print(f"New Title: {task.title}")
+
+        if new_title is not None:
+            print(f"Old Title: {old_title}")
+            print(f"New Title: {task.title}")
+        else:
+            print(f"Title: {task.title}")
+
+        if new_description is not None:
+            if old_description:
+                print(f"Old Description: {old_description}")
+            if task.description:
+                print(f"New Description: {task.description}")
+            else:
+                print(f"Description: (cleared)")
+
         return 0
     except KeyError as e:
         print(f"Error: {e}", file=sys.stderr)
@@ -151,6 +177,11 @@ def create_parser() -> argparse.ArgumentParser:
     # Add command
     add_parser = subparsers.add_parser("add", help="Add a new task")
     add_parser.add_argument("title", help="Task title")
+    add_parser.add_argument(
+        "-d", "--description",
+        help="Task description (optional)",
+        default=None
+    )
     add_parser.set_defaults(func=cmd_add)
 
     # List command
@@ -168,9 +199,14 @@ def create_parser() -> argparse.ArgumentParser:
     incomplete_parser.set_defaults(func=cmd_incomplete)
 
     # Update command
-    update_parser = subparsers.add_parser("update", help="Update task title")
+    update_parser = subparsers.add_parser("update", help="Update task title and/or description")
     update_parser.add_argument("task_id", help="Task ID (full or partial, min 8 chars)")
-    update_parser.add_argument("new_title", help="New task title")
+    update_parser.add_argument("new_title", nargs="?", default=None, help="New task title (optional)")
+    update_parser.add_argument(
+        "-d", "--description",
+        help="New task description (use empty string to clear)",
+        default=None
+    )
     update_parser.set_defaults(func=cmd_update)
 
     # Delete command

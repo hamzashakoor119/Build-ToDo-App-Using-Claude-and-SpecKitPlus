@@ -40,11 +40,16 @@ def add_task(store: TaskStore):
         print(f"{Colors.RED}❌ Error: Task title cannot be empty{Colors.END}")
         return
 
+    description = input(f"{Colors.CYAN}Enter description (optional, press Enter to skip):{Colors.END} ").strip()
+    description = description if description else None
+
     try:
-        task_id = store.add_task(title)
+        task_id = store.add_task(title, description)
         print(f"\n{Colors.GREEN}✓ Task added successfully!{Colors.END}")
         print(f"{Colors.BLUE}ID:{Colors.END} {task_id[:8]}")
         print(f"{Colors.BLUE}Title:{Colors.END} {title}")
+        if description:
+            print(f"{Colors.BLUE}Description:{Colors.END} {description}")
     except ValueError as e:
         print(f"{Colors.RED}❌ Error: {e}{Colors.END}")
 
@@ -70,6 +75,10 @@ def list_tasks(store: TaskStore):
             title = task.title
 
         print(f"{Colors.BLUE}{i}.{Colors.END} [{status}] {Colors.CYAN}{task.id[:8]}...{Colors.END} {title}")
+        if task.description:
+            # Show truncated description
+            desc = task.description[:40] + "..." if len(task.description) > 40 else task.description
+            print(f"      └─ {Colors.CYAN}{desc}{Colors.END}")
     print()
 
 
@@ -100,7 +109,7 @@ def mark_incomplete(store: TaskStore):
 
 
 def update_task(store: TaskStore):
-    """Update a task's title."""
+    """Update a task's title and/or description."""
     task_id = input(f"\n{Colors.CYAN}Enter task ID (min 8 chars):{Colors.END} ").strip()
 
     old_task = store.get_task(task_id)
@@ -108,17 +117,41 @@ def update_task(store: TaskStore):
         print(f"{Colors.RED}❌ Error: Task with ID {task_id} not found{Colors.END}")
         return
 
-    # Save old title before updating (to avoid reference issue)
+    # Save old values before updating
     old_title = old_task.title
+    old_description = old_task.description
 
-    new_title = input(f"{Colors.CYAN}Enter new title:{Colors.END} ").strip()
+    print(f"\n{Colors.CYAN}Current Title:{Colors.END} {old_title}")
+    if old_description:
+        print(f"{Colors.CYAN}Current Description:{Colors.END} {old_description}")
+
+    new_title = input(f"\n{Colors.CYAN}Enter new title (press Enter to keep current):{Colors.END} ").strip()
+    new_title = new_title if new_title else None
+
+    new_description = input(f"{Colors.CYAN}Enter new description (press Enter to keep, type 'clear' to remove):{Colors.END} ").strip()
+    if new_description.lower() == 'clear':
+        new_description = ""  # Empty string clears description
+    elif not new_description:
+        new_description = None  # None means don't update
 
     try:
-        task = store.update_task(task_id, new_title)
+        task = store.update_task(task_id, title=new_title, description=new_description)
         print(f"\n{Colors.GREEN}✓ Task updated successfully{Colors.END}")
         print(f"{Colors.BLUE}ID:{Colors.END} {task.id[:8]}")
-        print(f"{Colors.BLUE}Old Title:{Colors.END} {old_title}")
-        print(f"{Colors.BLUE}New Title:{Colors.END} {task.title}")
+
+        if new_title is not None:
+            print(f"{Colors.BLUE}Old Title:{Colors.END} {old_title}")
+            print(f"{Colors.BLUE}New Title:{Colors.END} {task.title}")
+        else:
+            print(f"{Colors.BLUE}Title:{Colors.END} {task.title}")
+
+        if new_description is not None:
+            if old_description:
+                print(f"{Colors.BLUE}Old Description:{Colors.END} {old_description}")
+            if task.description:
+                print(f"{Colors.BLUE}New Description:{Colors.END} {task.description}")
+            else:
+                print(f"{Colors.BLUE}Description:{Colors.END} (cleared)")
     except (KeyError, ValueError) as e:
         print(f"{Colors.RED}❌ Error: {e}{Colors.END}")
 
