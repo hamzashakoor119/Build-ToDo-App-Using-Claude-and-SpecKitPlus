@@ -72,6 +72,29 @@ After completing tasks, create PHR in `history/prompts/`:
 - Docstrings for public functions
 - No hardcoded values - use configuration
 
+## Quick Commands
+
+### `/status` or `/summary` - Instant Project Report
+Get an instant, fact-based project status report with minimal latency.
+
+**What it does**:
+- Scans specs/, history/, and metadata files (NOT source code)
+- Calculates progress from checklists
+- Lists recent milestones (last 3 PHRs/ADRs)
+- Shows next pending tasks
+- Detects missing files as risks
+
+**Output includes**:
+- Phase Identity & Tech Stack
+- Completion percentage
+- Completed milestones
+- Next immediate tasks
+- Blocked/Risks
+
+**Performance**: < 30 seconds, < 300 output tokens
+
+**Skill location**: `.claude/skills/project-intelligence/SKILL.md`
+
 ## CLI Interface Contract
 
 ```bash

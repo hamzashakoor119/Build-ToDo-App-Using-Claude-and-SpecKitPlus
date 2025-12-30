@@ -233,7 +233,7 @@ Using **single project** layout per plan.md:
 - [x] T084 Verify all acceptance criteria from spec.md are met
 - [x] T085 Run quickstart.md validation - test all commands manually
 - [x] T086 [P] Add --help text for all CLI commands
-- [ ] T087 [P] Add --version flag to CLI (Optional - basic level feature not required)
+- [x] T087 [P] Add --version flag to CLI (Optional - basic level feature not required)
 
 ---
 
@@ -376,8 +376,8 @@ Edge Cases + Polish together
 ## Task Summary
 
 **Total Tasks**: 87 tasks
-**Completed Tasks**: 86 tasks ✅
-**Remaining Tasks**: 1 task (optional --version flag)
+**Completed Tasks**: 87 tasks ✅
+**Remaining Tasks**: 0 tasks
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 6 tasks ✅ COMPLETE
@@ -388,7 +388,7 @@ Edge Cases + Polish together
 - Phase 6 (US4 - Update): 10 tasks ✅ COMPLETE
 - Phase 7 (US5 - Delete): 10 tasks ✅ COMPLETE
 - Phase 8 (Edge Cases): 8 tasks ✅ COMPLETE
-- Phase 9 (Polish): 10 tasks ✅ COMPLETE (1 optional remaining)
+- Phase 9 (Polish): 10 tasks ✅ COMPLETE
 
 **MVP Scope**: 34 tasks ✅ COMPLETE
 

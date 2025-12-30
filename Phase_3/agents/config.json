@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "agent": {
+    "name": "Todo Assistant",
+    "description": "AI-powered todo task management assistant",
+    "instructions": "You are a helpful assistant that helps users manage their todo tasks. Use the available MCP tools to perform task operations. Always confirm the action before executing it.",
+    "tools": [
+      "add_task",
+      "list_tasks",
+      "complete_task",
+      "delete_task",
+      "update_task"
+    ],
+    "model": {
+      "provider": "openai",
+      "name": "gpt-4o-mini",
+      "temperature": 0.7
+    },
+    "domain": {
+      "allowlist": ["openai.com"]
+    }
+  },
+  "mcp_server": {
+    "name": "todo-server",
+    "url": "http://localhost:3001",
+    "tools": [
+      "add_task",
+      "list_tasks",
+      "complete_task",
+      "delete_task",
+      "update_task"
+    ]
+  }
+}

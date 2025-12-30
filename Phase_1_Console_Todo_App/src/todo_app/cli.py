@@ -165,14 +165,28 @@ def cmd_delete(args) -> int:
         return 130
 
 
+def get_version() -> str:
+    """Get application version from package metadata."""
+    try:
+        from importlib.metadata import version
+        return version("todo-app")
+    except Exception:
+        return "0.1.0"
+
+
 def create_parser() -> argparse.ArgumentParser:
     """Create and configure argument parser."""
     parser = argparse.ArgumentParser(
         description="Simple console todo application",
         prog="todo"
     )
+    parser.add_argument(
+        "-v", "--version",
+        action="version",
+        version=f"%(prog)s {get_version()}"
+    )
 
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers = parser.add_subparsers(dest="command", required=False)
 
     # Add command
     add_parser = subparsers.add_parser("add", help="Add a new task")
@@ -229,6 +243,11 @@ def run_cli(args=None) -> int:
     """
     parser = create_parser()
     parsed_args = parser.parse_args(args)
+
+    # If no command provided, show help
+    if parsed_args.command is None:
+        parser.print_help()
+        return 0
 
     # Call the appropriate command function
     return parsed_args.func(parsed_args)
